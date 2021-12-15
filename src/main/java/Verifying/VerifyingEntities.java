@@ -56,7 +56,7 @@ public class VerifyingEntities {
     }
 
     //проверка допустимости общей ссуммы на счёте с учётом трансакции Дописть на отрицательные числа
-    public static Boolean checkAccountSum(int _sum, int _accountId) throws SQLException, IOException {
+    public static Boolean checkAccountFinalSumPlus(int _sum, String _currency) throws SQLException, IOException {
         try{
             Class.forName("org.postgresql.Driver");
         } catch (Exception e){
@@ -66,7 +66,7 @@ public class VerifyingEntities {
         try(Connection connection = DBConnection.getConnection();
             Statement statement = connection.createStatement()){
             int finalSum = _sum;
-            ResultSet rs = statement.executeQuery("SELECT amount FROM Accounts where accountId=" + _accountId);
+            ResultSet rs = statement.executeQuery("SELECT amount FROM Accounts where currency=" + "'" + _currency + "'");
             while (rs.next()){
                 finalSum += rs.getInt("accountId");
             }

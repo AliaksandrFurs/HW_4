@@ -24,5 +24,9 @@ public class Main {
             DBCrudOperations.addUserAccount(fifthUser, 3, 20000, "BYN");
             DBCrudOperations.addUserAccount(firstUser, 1, 10000, "RUB");
 
+            DBCrudOperations.accountUpdate(fifthUser, "BYN", 10000);
+            DBCrudOperations.accountUpdate(fifthUser, "BYN", 200000000);
+            //DBCrudOperations.accountUpdate(secondUser, "BYN", 25000);
+
     }
 }

@@ -61,7 +61,38 @@ public class DBCrudOperations {
     }
 
     public static void accountUpdate(User _user, String _currency, int _sum){
+        String insertRequest = "INSERT INTO Transactions (transactionId, accountId, amount) VALUES (null,?,?)";
+        int accountId = 0;
 
+        Boolean ifIdExist = VerifyingEntities.checkUserId(_user);
+        Boolean ifCurrencyExist = VerifyingEntities.checkCurrency(_currency);
+        Boolean isSumOk = VerifyingEntities.checkTransactionAmount(_sum);
+        Boolean ifAccountWithCurrencyExist = VerifyingEntities.ifAccountWithCurrencyExist(_user, _currency);
+
+        if(ifIdExist == true && ifCurrencyExist == true && ifAccountWithCurrencyExist == false){
+            try(Connection connection = DBConnection.getConnection();
+                Statement statement = connection.createStatement()){
+                ResultSet rs = statement.executeQuery("SELECT accountID FROM Accounts WHERE currency=" + "'" + _currency + "'");
+                while(rs.next()){
+                    accountId = rs.getInt(1);
+                }
+
+            }catch (SQLException | IOException e){
+                System.out.println("Smth goes wrong");
+            }
+        }
+
+        if(ifIdExist == true && ifCurrencyExist == true && isSumOk == true && ifAccountWithCurrencyExist == false){
+
+            try(Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(insertRequest)){
+                statement.setInt(2, accountId);
+                statement.setInt(3,_sum);
+                statement.executeUpdate();
+             }catch (SQLException | IOException e){
+                System.out.println("Smth goes wrong");
+            }
+        }
     }
 
 }
