@@ -1,14 +1,10 @@
-package Verifying;
-import  Utils.DBConnection;
-import Enums.CurrenciesEnum;
+package verifying;
+import  utils.DBConnection;
 
-import Entities.User;
-import jdk.jshell.execution.Util;
-import org.postgresql.core.Utils;
+import entities.User;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.Locale;
 
 public class VerifyingEntities {
 
@@ -48,7 +44,7 @@ public class VerifyingEntities {
                 return true;
             case "BYN":
                 return true;
-            case "RUN":
+            case "RUB":
                 return true;
             default :
                 return false;
@@ -94,11 +90,12 @@ public class VerifyingEntities {
             ResultSet rs = statement.executeQuery("SELECT name FROM Users");
             while(rs.next()){
                 if(_user.getName().equals(rs.getString("name"))){
+                    System.out.println("User with this name is already exist");
                     return true;
                 }
             }
         } catch (SQLException | IOException e){
-            System.out.println("User with this name is already exist");
+            System.out.println("Could not establish connection");
         }
         return false;
     }

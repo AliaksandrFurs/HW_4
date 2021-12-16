@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 public class User {
 
@@ -12,6 +12,11 @@ public class User {
         this.userId = _userID;
         this.name = _name;
         this.address = _address;
+    }
+
+    public User (int _userID, String _name){
+        this.userId = _userID;
+        this.name = _name;
     }
 
     public int getUserId() {
