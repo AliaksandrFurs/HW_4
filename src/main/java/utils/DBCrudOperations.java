@@ -1,5 +1,6 @@
 package utils;
 
+import constants.Constants;
 import entities.User;
 import verifying.VerifyingEntities;
 
@@ -91,7 +92,7 @@ public class DBCrudOperations {
                 System.out.println("Smth goes wrong");
             }
 
-            if(finalSum < 0 || finalSum > 2000000000) {
+            if(finalSum < Constants.minAccount || finalSum > Constants.maxAccount) {
                 transactionSuccesfull = false;
                 System.out.println("Transaction declined");
             }else{

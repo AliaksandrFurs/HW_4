@@ -1,4 +1,5 @@
 package verifying;
+import constants.Constants;
 import  utils.DBConnection;
 
 import entities.User;
@@ -51,32 +52,6 @@ public class VerifyingEntities {
         }
     }
 
-    //проверка допустимости общей ссуммы на счёте с учётом трансакции Дописть на отрицательные числа
-    public static Boolean checkAccountFinalSumPlus(int _sum, String _currency) throws SQLException, IOException {
-        try{
-            Class.forName("org.postgresql.Driver");
-        } catch (Exception e){
-            System.out.println("Нет драйвера");
-        }
-
-        try(Connection connection = DBConnection.getConnection();
-            Statement statement = connection.createStatement()){
-            int finalSum = _sum;
-            ResultSet rs = statement.executeQuery("SELECT amount FROM Accounts where currency=" + "'" + _currency + "'");
-            while (rs.next()){
-                finalSum += rs.getInt("accountId");
-            }
-            if(finalSum > 2000000000){
-                return false;
-            }else{
-                return true;
-            }
-        } catch (SQLException e){
-            System.out.println("Y");
-        }
-        return false;
-    }
-
     public static Boolean checkUser (User _user)  {
 
         try{
@@ -101,7 +76,7 @@ public class VerifyingEntities {
     }
 
     public static Boolean checkTransactionAmount (int _amount){
-        if(_amount > 100000000 || _amount < 0){
+        if(_amount > Constants.maxTransaction || _amount < Constants.minAccount){
             return false;
         }
         return true;
