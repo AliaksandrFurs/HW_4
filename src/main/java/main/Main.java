@@ -27,13 +27,17 @@ public class Main {
             //DBCrudOperations.addUserAccount(firstUser, 1, 10000, "RUB");
             //DBCrudOperations.addUserAccount(firstUser, 4, 10000, "RUB");
             //DBCrudOperations.addUserAccount(firstUser, 5, 10000, "USD");
+            //DBCrudOperations.addUserAccount(secondUser, 6, -800, "USD");
 
-            //DBCrudOperations.accountUpdate(fifthUser, 1, "BYN", 10000);
-            //DBCrudOperations.accountUpdate(fifthUser, 2, "BYN", 200000000);
-            //DBCrudOperations.accountUpdate(firstUser, 3, "RUB", 25000);
+            DBCrudOperations.accountUpdate(fifthUser, 1, "BYN", 10000);
+            DBCrudOperations.accountUpdate(fifthUser, 2, "BYN", 200000000);
+            DBCrudOperations.accountUpdate(firstUser, 3, "RUB", 25000);
+            DBCrudOperations.accountUpdate(firstUser, 3, "RUB", 150000);
 
             DBCrudOperations.withdrowAccount(fifthUser, 4,"BYN", 100);
-            //DBCrudOperations.withdrowAccount(fifthUser, 4,"BYN", 80000);
+            DBCrudOperations.withdrowAccount(fifthUser, 5,"BYN", 10);
+            DBCrudOperations.withdrowAccount(fifthUser, 5,"BYN", 80000);
+            DBCrudOperations.withdrowAccount(fifthUser, 5,"BYN", 60);
 
     }
 }

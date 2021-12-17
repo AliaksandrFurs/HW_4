@@ -9,13 +9,12 @@ import java.sql.*;
 
 public class VerifyingEntities {
 
-    // роверка наличия такого юзера по ID
     public static boolean checkUserId (User _user) {
 
         try{
             Class.forName("org.postgresql.Driver");
         } catch (Exception e){
-            System.out.println("Нет драйвера");
+            System.out.println(Constants.noDriver);
         }
 
         try(Connection connection = DBConnection.getConnection();
@@ -29,14 +28,13 @@ public class VerifyingEntities {
                 }
             }
         } catch (SQLException | IOException e) {
-            System.out.println("Нет такого ID");
+            System.out.println(Constants.noID);
         } finally {
 
         }
         return false;
     }
 
-    //проверка правильности введения валюты
     public static Boolean checkCurrency (String _currency){
         switch (_currency.toUpperCase()){
             case "EUR":
@@ -57,7 +55,7 @@ public class VerifyingEntities {
         try{
             Class.forName("org.postgresql.Driver");
         } catch (Exception e){
-            System.out.println("Нет драйвера");
+            System.out.println(Constants.noDriver);
         }
 
         try(Connection connection = DBConnection.getConnection();
@@ -65,25 +63,60 @@ public class VerifyingEntities {
             ResultSet rs = statement.executeQuery("SELECT name FROM Users");
             while(rs.next()){
                 if(_user.getName().equals(rs.getString("name"))){
-                    System.out.println("User with this name is already exist");
+                    System.out.println(Constants.idExists);
                     return true;
                 }
             }
         } catch (SQLException | IOException e){
-            System.out.println("Could not establish connection");
+            System.out.println(Constants.noCOnnection);
         }
         return false;
     }
 
-    public static Boolean checkTransactionAmount (int _amount){
-        if(_amount > Constants.maxTransaction || _amount < Constants.minAccount){
+    public static Boolean checkAccountFinalBalance (int _amount, String _currency, char _operation){
+
+        int finalSum = 0;
+
+        switch (_operation){
+            case '-':
+                try (Connection connection = DBConnection.getConnection();
+                     Statement statement = connection.createStatement()) {
+                    ResultSet rs = statement.executeQuery("SELECT balance FROM Accounts WHERE currency=" + "'" + _currency + "'");
+                    while (rs.next()) {
+                        finalSum = rs.getInt("balance") - _amount;
+                    }
+                } catch (SQLException | IOException e) {
+                    System.out.println(Constants.noCOnnection);
+                }
+                break;
+            case '+':
+                try (Connection connection = DBConnection.getConnection();
+                     Statement statement = connection.createStatement()) {
+                    ResultSet rs = statement.executeQuery("SELECT balance FROM Accounts WHERE currency=" + "'" + _currency + "'");
+                    while (rs.next()) {
+                        finalSum = rs.getInt("balance") + _amount;
+                    }
+                } catch (SQLException | IOException e) {
+                    System.out.println(Constants.noCOnnection);
+                }
+                break;
+        }
+
+        if(finalSum > Constants.maxAccount || finalSum < Constants.minAccount || finalSum == 0){
             return false;
         }
         return true;
     }
 
-    public static Boolean checkAccountBalance(int _currentBalance){
-        if(_currentBalance == 0){
+    public static Boolean checkTransactionAmount (int _amount){
+        if(_amount > Constants.maxTransaction || _amount == 0){
+            return false;
+        }
+        return true;
+    }
+
+    public static Boolean checkBalanceAmount (int _amount){
+        if (_amount > Constants.maxAccount || _amount < 0){
             return false;
         }
         return true;
@@ -100,10 +133,8 @@ public class VerifyingEntities {
                 }
             }
         } catch (SQLException | IOException e){
-            System.out.println("Something wrong");
+            System.out.println(Constants.noCOnnection);
         }
         return false;
     }
-
-
 }
